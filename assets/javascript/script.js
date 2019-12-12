@@ -157,11 +157,11 @@ function inputEvent(event){
      console.log(eventInputValue);
      var eventTimeValue = $(this).parent().children(":nth-child(2)").val();
     console.log(eventTimeValue);
-    var eventIndex = event.target.parent.parent.value;
+    var eventIndex = $(this).parent().parent().attr("value");
     console.log(eventIndex);
     thingsToDo[eventIndex].events=eventInputValue;
     thingsToDo[eventIndex].time = eventTimeValue;
-    localStorage.setitem("thingsToDo",JSON.stringify(thingsToDo));
+    localStorage.setItem("thingsToDo",JSON.stringify(thingsToDo));
     addEvents();
 
 
