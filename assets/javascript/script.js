@@ -11,7 +11,7 @@
 
 var hourDivs = document.querySelectorAll(".hour");
 var eventCounterNumber=0;
-var thingsToDo = JSON.parse( localStorage.getItem("ThingsToDo"));
+var thingsToDo = JSON.parse( localStorage.getItem("thingsToDo"));
 var today = new Date();
 var thisMonthUnformated = today.getMonth();
 var thisMonth=formatMonth(thisMonthUnformated);
@@ -124,13 +124,21 @@ function addEvents(){
        ];
        
     } 
+    else{
+        thingsToDo=JSON.parse(localStorage.getItem("thingsToDo"));
+    }
+    console.log(thingsToDo);
     
         for(var i = 0;i<hourDivs.length;i++){
             
-        if(thingsToDo[i].events){
-        hourDivs[i].textContent =thingsToDo[i].events;}
-        else if(thingsToDo[i].events&&thingsToDo[i].time){
-        hourDivs[i].textContent =thingsToDo[i].events; + "time:"+ ":" + moment(thingsToDo[i].time).format("hh:mm:ss a");}
+        if(thingsToDo[i].events&&thingsToDo[i].time){
+            console.log(thingsToDo[i].time.toString());
+        hourDivs[i].textContent =thingsToDo[i].events +  " " + "TIME:"+ "" +thingsToDo[i].time;
+        }
+        else if(thingsToDo[i].events){
+            hourDivs[i].textContent =thingsToDo[i].events;};
+            
+    
     }
 };
 function readySetup(){
@@ -163,6 +171,7 @@ function inputEvent(event){
     thingsToDo[eventIndex].time = eventTimeValue;
     localStorage.setItem("thingsToDo",JSON.stringify(thingsToDo));
     addEvents();
+    timeCounter();
 
 
 };
@@ -189,9 +198,7 @@ if(this ===event.target){
         $(".eventForm").val("hidden");
     // $(".hour").classList.remove("enlarge");}
 }
-    }}
-
-);
+    }});
 
 
 //     this.parent.val()
