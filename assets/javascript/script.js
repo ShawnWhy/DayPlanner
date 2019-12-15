@@ -261,7 +261,8 @@ function timeToNumbers(){
         console.log(differenceHour);
         var differenceMinute=Math.floor(difference%60);
         console.log(differenceMinute);
-        if (differenceMinute<10){differenceMinute="0"+differenceMinute};
+        if (Math.abs(differenceMinute)<10){differenceMinute="0"+differenceMinute};
+        console.log(differenceMinute);
 
         
         $(".minutesTillNumber").text(differenceHour + ":" + differenceMinute)},1000);}
