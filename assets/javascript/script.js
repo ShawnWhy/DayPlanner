@@ -237,7 +237,7 @@ function timeToNumbers(){
         // if(thingsToDoHours[j].hour==undefined){$(".minutesTillNumber").text("no more event today");
         // setTimeout(
         // clearInterval(countDownInterval),1000)};
-           
+                 
         var countDownInterval= setInterval(function(){
         nowTimeToString=moment().format("HH:mm").toString();
         var nowTimeStringToArray=nowTimeToString.split(":");
@@ -248,8 +248,9 @@ function timeToNumbers(){
         console.log(nowTimeInMinutes);
         console.log(hourTimeMinutes);
         difference = hourTimeMinutes-nowTimeInMinutes;
-        if(difference<=0&&thingsToDo[j+1].time){clearInterval(countDownInterval);j+=1;setTimeCountDown()}
-        else{$(".minutesTillNumber").text("no more event today");
+        if(difference<=0&&thingsToDo[j+1].time!==null){clearInterval(countDownInterval);j+=1;setTimeCountDown()}
+        // else if (thingsToDo[j])
+        {$(".minutesTillNumber").text("no more event today");
         setTimeout(
         clearInterval(countDownInterval),50);};
        
