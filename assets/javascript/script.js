@@ -6,12 +6,16 @@
 
 
 //the date planner is created with the display of of the dayofweek, date month and year displayed in the header
-//a div is created in the main container that correspont to each hour of the work week. 
-//
 
+//a div is created in the main container that correspont to each hour of the work week. 
+var j=0;
+var nowTimeToString=moment().format("HH:mm").toString();
+var difference;
+var nowTimeNumberValue={};
 var hourDivs = document.querySelectorAll(".hour");
 var eventCounterNumber=0;
 var thingsToDo = JSON.parse( localStorage.getItem("thingsToDo"));
+var thingsToDoHours=[];
 var today = new Date();
 var thisMonthUnformated = today.getMonth();
 var thisMonth=formatMonth(thisMonthUnformated);
@@ -36,6 +40,30 @@ else if (thisHour===0){
 if(thisMinute<10){thisMinute="0"+thisMinute;
 
 };
+// function momentTest(){
+//     alert("momentTEst");
+//     var dateTest = thingsToDo[0].time;
+//     console.log(dateTest)
+//     dateTest = dateTest.toString();
+//     console.log(dateTest);
+//     var fromNow2 = moment().subtract(dateTest).from(moment());
+//     console.log(fromNow2);
+//     var momentTest = new moment(dateTest, "HH:mm:ss");
+//     console.log(momentTest);
+//     var fromNow = momentTest.fromNow(true);
+//     console.log(fromNow);
+//     var fromNowMinutes = moment(fromNow,"HH:mm:ss");
+//     console.log(fromNowMinutes);
+//     var timeList=[];
+//     for (var i =0;i<thingsToDo.length;i++){
+//         timeList[i]=thingsToDo[i].time;
+//         }
+//     console.log(timeList);
+
+
+    
+// }
+// momentTest();
 
 
 function formatMonth(month){
@@ -88,11 +116,10 @@ if(today.getSeconds() % 2 ===1){
     $(".time").html(thisHour + dots + thisMinute + " " + ampm);
 
 };
-function setCounterNumber(){
-    $(".minitesTillNumber").text
-}
 
-function EventCounter(){
+
+function eventCounter(){
+    eventCounterNumber=0;
     for(var i=0;i<thingsToDo.length;i++){
         if(thingsToDo[i].events){
             eventCounterNumber+=1;}
@@ -100,9 +127,9 @@ function EventCounter(){
 
 
     }
-function eventPast(){
-var timeCounter = moment(thingsToDo[i].time, "mm :ss").fromNow(true);
-}
+// function eventPast(){
+// var timeCounter = moment(thingsToDo[i].time, "mm :ss").fromNow(true);
+// }
 
 
 }
@@ -133,10 +160,10 @@ function addEvents(){
             
         if(thingsToDo[i].events&&thingsToDo[i].time){
             console.log(thingsToDo[i].time.toString());
-        hourDivs[i].textContent =thingsToDo[i].events +  " " + "TIME:"+ "" +thingsToDo[i].time;
+        hourDivs[i].firstChild.textContent =thingsToDo[i].events +  " " + "TIME:"+ "" +thingsToDo[i].time;
         }
         else if(thingsToDo[i].events){
-            hourDivs[i].textContent =thingsToDo[i].events;};
+            hourDivs[i].firstChild.textContent =thingsToDo[i].events;};
             
     
     }
@@ -144,13 +171,15 @@ function addEvents(){
 function readySetup(){
     $(".eventForm").attr("style","visibility:hidden");
     $(".eventForm").val("hidden");
+    $(".hourText").attr("style","visibility:visible");
+    $(".hourText").val("visible");
 
     $(".dayOfWeek").text(thisDayOfWeek);
     
     var timeInterval = setInterval(timeTick,1000);
     $(".date").text(thisMonth+ " " +thisDate+ " " + (parseInt(thisYear)+1900));
     addEvents();
-    EventCounter();
+    eventCounter();
     
 };
 
@@ -171,11 +200,87 @@ function inputEvent(event){
     thingsToDo[eventIndex].time = eventTimeValue;
     localStorage.setItem("thingsToDo",JSON.stringify(thingsToDo));
     addEvents();
-    timeCounter();
-
-
+    eventCounter();
 };
 // $('.selected').parent().parent().children(':first-child')
+//set time 
+//first parse the time now and the time obtained to strings
+
+function timeToNumbers(){
+    
+  //this turns the time variables of now and the event time into arrays of numbers minute: and Hour:  
+    var thingstoDoHours=[];
+    //  console.log(thingsToDo);
+    for (var i = 0; i<thingsToDo.length;i++){
+        var hourTime = thingsToDo[i].time.toString();
+        var timeStringToArray=hourTime.split(":");
+        var timeNumberValue={};
+        timeNumberValue={"hour":parseInt(timeStringToArray[0]),
+        "minute":parseInt(timeStringToArray[1])};
+        thingsToDoHours.push(timeNumberValue);
+        // console.log(timeNumberValue);
+        // console.log(timeStringToArray);
+        // console.log(thingstoDoHours);
+        
+        
+        
+    // console.log(nowTimeNumberValue);
+    // console.log(nowTimeStringToArray);}
+    }
+    setTimeCountDown();
+    
+        
+    }
+    timeToNumbers()
+
+    function setTimeCountDown(){
+        // if(thingsToDoHours[j].hour==undefined){$(".minutesTillNumber").text("no more event today");
+        // setTimeout(
+        // clearInterval(countDownInterval),1000)};
+           
+        var countDownInterval= setInterval(function(){
+        nowTimeToString=moment().format("HH:mm").toString();
+        var nowTimeStringToArray=nowTimeToString.split(":");
+        nowTimeNumberValue={"hour":parseInt(nowTimeStringToArray[0]),
+        "minute":parseInt(nowTimeStringToArray[1])};
+        var nowTimeInMinutes = nowTimeNumberValue.hour*60+nowTimeNumberValue.minute;
+        var hourTimeMinutes = thingsToDoHours[j].hour*60+thingsToDoHours[j].minute;
+        console.log(nowTimeInMinutes);
+        console.log(hourTimeMinutes);
+        difference = hourTimeMinutes-nowTimeInMinutes;
+        if(difference<=0&&thingsToDo[j+1].time){clearInterval(countDownInterval);j+=1;setTimeCountDown()}
+        else{$(".minutesTillNumber").text("no more event today");
+        setTimeout(
+        clearInterval(countDownInterval),50);};
+       
+        
+        
+        var differenceHour=Math.floor(difference/60);
+        console.log(difference);
+         differenceHour = differenceHour.toString();
+        console.log(differenceHour);
+        var differenceMinute=Math.floor(difference%60);
+        console.log(differenceMinute);
+        if (differenceMinute<10){differenceMinute="0"+differenceMinute};
+
+        
+        $(".minutesTillNumber").text(differenceHour + ":" + differenceMinute)},1000);}
+        // if(difference<=0){clearInterval(countDownInterval);};
+        
+        
+
+
+        
+    
+    
+   
+ 
+
+
+// timeToNumbers();
+// function setCounterNumber(){
+//     $(".minitesTillNumber").text
+// }
  
 
 $(".eventSubmit").on("click",inputEvent);
@@ -187,7 +292,7 @@ if(this ===event.target){
      if($(".eventForm").val()=="hidden"){
     $(".eventForm").attr("style", "visibility:visible");
     $(".eventForm").val("visible");
-    // $(".hour").classList.add("enlarge");
+     $(".hourText").attr("style","visibility:hidden");
     }
     else if (($(".eventForm").val()=="visible")){
         $(".eventForm").val("ready"); 
@@ -196,6 +301,8 @@ if(this ===event.target){
     else{
         $(".eventForm").attr("style", "visibility:hidden");
         $(".eventForm").val("hidden");
+        $(".hourText").attr("style","visibility:visible");
+        
     // $(".hour").classList.remove("enlarge");}
 }
     }});
