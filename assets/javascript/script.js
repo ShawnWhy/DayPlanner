@@ -40,6 +40,11 @@ else if (thisHour===0){
 if(thisMinute<10){thisMinute="0"+thisMinute;
 
 };
+
+
+var newTime = moment();
+var parsedMomment = newTime.format("HH:mm");
+alert(parsedMomment);
 // function momentTest(){
 //     alert("momentTEst");
 //     var dateTest = thingsToDo[0].time;
@@ -180,6 +185,7 @@ function readySetup(){
     $(".date").text(thisMonth+ " " +thisDate+ " " + (parseInt(thisYear)+1900));
     addEvents();
     eventCounter();
+    timeToNumbers();    
     
 };
 
@@ -217,7 +223,7 @@ function timeToNumbers(){
         var timeNumberValue={};
         timeNumberValue={"hour":parseInt(timeStringToArray[0]),
         "minute":parseInt(timeStringToArray[1])};
-        thingsToDoHours.push(timeNumberValue);
+        thingsToDoHours.push(timeNumberValue); 
         // console.log(timeNumberValue);
         // console.log(timeStringToArray);
         // console.log(thingstoDoHours);
@@ -231,7 +237,7 @@ function timeToNumbers(){
     
         
     }
-    timeToNumbers()
+    
 
     function setTimeCountDown(){
         // if(thingsToDoHours[j].hour==undefined){$(".minutesTillNumber").text("no more event today");
@@ -249,10 +255,10 @@ function timeToNumbers(){
         console.log(hourTimeMinutes);
         difference = hourTimeMinutes-nowTimeInMinutes;
         if(difference<=0&&thingsToDo[j+1].time!==null){clearInterval(countDownInterval);j+=1;setTimeCountDown()}
-        // else if (thingsToDo[j])
-        {$(".minutesTillNumber").text("no more event today");
-        setTimeout(
-        clearInterval(countDownInterval),50);};
+        // else if (thingsToDo[j]=null){
+        // {$(".minutesTillNumber").text("no more event today");
+        // setTimeout(
+        // clearInterval(countDownInterval),50);};
        
         
         
@@ -264,7 +270,7 @@ function timeToNumbers(){
         console.log(differenceMinute);
         if (Math.abs(differenceMinute)<10){differenceMinute="0"+differenceMinute};
         console.log(differenceMinute);
-
+        // if(difference<=0){clearInterval(countDownInterval);}
         
         $(".minutesTillNumber").text(differenceHour + ":" + differenceMinute)},1000);}
         // if(difference<=0){clearInterval(countDownInterval);};
